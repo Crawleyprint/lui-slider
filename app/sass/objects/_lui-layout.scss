@@ -1,7 +1,9 @@
 .lui-slider__frame {
   font-size: 0; // This eliminates gap between elements defined as inline-block
   width: 100%;
+  min-height: 350px;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .lui-slider__item {
@@ -9,9 +11,11 @@
   // isn't quite what we want, hence we have to reset the font size
   font-size: $lui-font-size--slider-item;
   display: inline-block;
+  transition: 0.2s all ease;
   transform: scale(100%, 100%);
   width: 18%;
   vertical-align: $lui-slider-item-alignment;
+  box-sizing: border-box;
 
   &--active {
     transform: scale(130%, 130%);

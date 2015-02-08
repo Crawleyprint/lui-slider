@@ -3,11 +3,14 @@
 ;(function setupLUISlider(window, undefined) {
 
   /**
-   * Slider app prototype
+   * @module Slider app prototype
    *
-   * @param {Object} o - Slider options map
    * @author Mladen Stepanić <mladen.stepanic@gmail.com>
    * @license GNU GPL3
+   *
+   * @param {Object} options - Slider options map
+   *
+   * @return {Object} LuiSlider
    */
   function LuiSlider(options) {
     /**
@@ -39,6 +42,7 @@
   LuiSlider.prototype.setup = function luiSetup() {
     // get all images
     var images = this.el.getElementsByTagName('img') || [];
+    var that = this;
 
     // setup event listeners for next and previous buttons
     this.nextElement.addEventListener('click', this.next.bind(this));
@@ -56,7 +60,6 @@
   LuiSlider.prototype.addImageToSlider = function addImageToSlider(img) {
     var isActive = img.classList.contains(this.activeClass);
     this.images.push({
-      rendered: false,
       src: img.getAttribute('src'),
       alt: img.getAttribute('alt'),
       isActive: isActive
@@ -91,7 +94,6 @@
   LuiSlider.prototype.render = function() {
     var that = this;
     var html = [];
-    that.clean();
     this.images.forEach(function(image) {
       html.push(that.template(image));
     });
@@ -99,53 +101,75 @@
     return this;
   };
 
+  LuiSlider.prototype.switchSlide = function switchSlide(direction) {
+    var totalLength = this.images.length;
+    var activeIndex = this.findActiveSlide();
+    var destIndex;
+    var active = this.images[activeIndex];
+    var dest;
+
+    // remove active flag from it
+    active.isActive = false;
+    // if first item is active, set that last element of the image array
+    // should go next
+    if (direction === 'next') {
+      if (activeIndex === totalLength - 1) {
+        destIndex = 0;
+      } else {
+        destIndex = activeIndex + 1;
+      }
+    } else {
+      if (activeIndex === 0) {
+        destIndex = totalLength - 1;
+      } else {
+        destIndex = activeIndex - 1;
+      }
+    }
+    dest = this.images[destIndex];
+    dest.isActive = true;
+    this.images.splice(activeIndex, 1, active);
+    this.images.splice(destIndex , 1, dest);
+    this.transitionToSlide(destIndex);
+  };
+
   LuiSlider.prototype.next = function(e) {
     if (e) {
       e.preventDefault();
     }
-    var activeIndex = -1;
-    var sliderLength = this.images.length;
-    var next;
-
-    this.images.forEach(function filterImages(image, idx) {
-      if (image.isActive === true) {
-        activeIndex = idx;
-      }
-    });
-    this.images[activeIndex].isActive = false;
-    if (activeIndex === sliderLength - 1) {
-      next = 0;
-    } else {
-      next = activeIndex + 1;
-    }
-    this.images[next].isActive = true;
-    this.render();
+    this.switchSlide('next');
   };
+
 
   LuiSlider.prototype.previous = function(e) {
     if (e) {
       e.preventDefault();
     }
-    var activeIndex = -1;
-    var prev;
+    this.switchSlide('prev');
+  };
 
-    // find active image index
+  /**
+   * Iterate through images collection and find index of one that has
+   * active property set to true
+   *
+   * @return {{Number}}
+   */
+  LuiSlider.prototype.findActiveSlide = function findActiveSlide() {
+    var activeIndex = -1;
     this.images.forEach(function filterImages(image, idx) {
       if (image.isActive === true) {
         activeIndex = idx;
       }
     });
-    // remove active flag from it
-    this.images[activeIndex].isActive = false;
-    // if first item is active, set that last element of the image array
-    // should go next
-    if (activeIndex === 0) {
-      prev = this.images.length - 1;
-    } else {
-      prev = activeIndex - 1;
-    }
-    this.images[prev].isActive = true;
-    this.render();
+
+    return activeIndex;
+  };
+  LuiSlider.prototype.transitionToSlide = function(toIndex) {
+    var fromSlide = this.el.getElementsByClassName(this.activeClass);
+    var toSlide = this.el.childNodes[toIndex];
+
+    fromSlide[0].classList.remove(this.activeClass);
+    toSlide.classList.add(this.activeClass);
+
   };
 
   window.mainSlider = new LuiSlider({
