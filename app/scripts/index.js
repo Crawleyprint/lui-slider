@@ -42,7 +42,6 @@
   LuiSlider.prototype.setup = function luiSetup() {
     // get all images
     var images = this.el.getElementsByTagName('img') || [];
-    var that = this;
 
     // setup event listeners for next and previous buttons
     this.nextElement.addEventListener('click', this.next.bind(this));
@@ -53,6 +52,8 @@
       .slice
       .call(images)
       .forEach(this.addImageToSlider.bind(this));
+
+    window.onresize = this.transitionToSlide;
 
     return this;
   };
@@ -125,8 +126,10 @@
         destIndex = activeIndex - 1;
       }
     }
+
     dest = this.images[destIndex];
     dest.isActive = true;
+
     this.images.splice(activeIndex, 1, active);
     this.images.splice(destIndex , 1, dest);
     this.transitionToSlide(destIndex);
@@ -165,6 +168,9 @@
   };
 
   LuiSlider.prototype.transitionToSlide = function(toIndex) {
+    if (!toIndex) {
+      toIndex = this.findActiveSlide();
+    }
     var fromSlide = this.el.getElementsByClassName(this.activeClass)[0];
     var toSlide = this.el.childNodes[toIndex];
 
@@ -179,6 +185,8 @@
       factor = 0;
     } else if (toIndex < this.images.length - 2) {
       factor = toIndex - 2;
+    } else {
+      factor = this.images.length - 5;
     }
 
     this.el.style.marginLeft = -1 * factor * width + 'px';
