@@ -4,6 +4,7 @@ var gulp = require('gulp');
 
 var sass = require('gulp-sass');
 var server = require('gulp-webserver');
+var autoprefixer = require('gulp-autoprefixer');
 
 /**
  * Initialize development web server with live reload support.
@@ -21,6 +22,9 @@ gulp.task('webserver', ['watch', 'sass'], function setupWebserver() {
 gulp.task('sass', function compileSass() {
   gulp.src('app/sass/*.scss')
     .pipe(sass())
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions', 'ie9']
+    }))
     .pipe(gulp.dest('app/css/'));
 });
 
