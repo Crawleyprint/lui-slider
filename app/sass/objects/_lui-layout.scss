@@ -1,4 +1,9 @@
+.lui-slider__wrapper {
+  overflow: hidden;
+}
+
 .lui-slider__frame {
+  transition: margin-left 0.2s ease;
   font-size: 0; // This eliminates gap between elements defined as inline-block
   width: 100%;
   min-height: 350px;

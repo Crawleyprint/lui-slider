@@ -163,13 +163,25 @@
 
     return activeIndex;
   };
+
   LuiSlider.prototype.transitionToSlide = function(toIndex) {
-    var fromSlide = this.el.getElementsByClassName(this.activeClass);
+    var fromSlide = this.el.getElementsByClassName(this.activeClass)[0];
     var toSlide = this.el.childNodes[toIndex];
 
-    fromSlide[0].classList.remove(this.activeClass);
+    var csswidth = window.getComputedStyle(toSlide).getPropertyValue('width');
+    var width = parseInt(csswidth, 10);
+    var factor;
+
+    fromSlide.classList.remove(this.activeClass);
     toSlide.classList.add(this.activeClass);
 
+    if (toIndex < 3) {
+      factor = 0;
+    } else if (toIndex < this.images.length - 2) {
+      factor = toIndex - 2;
+    }
+
+    this.el.style.marginLeft = -1 * factor * width + 'px';
   };
 
   window.mainSlider = new LuiSlider({
