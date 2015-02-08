@@ -142,7 +142,7 @@
     var dest;
 
     if (typeof direction === 'object') {
-      this.timeout = this.initTransition(2000);
+      this.transition();
       return;
     }
 
@@ -170,16 +170,6 @@
     this.images.splice(activeIndex, 1, active);
     this.images.splice(destIndex , 1, dest);
     this.timeout = this.transition();
-  };
-
-  LuiSlider.prototype.initTransition = function initTransition(timeout) {
-    if (!timeout) {
-      timeout = 0;
-    }
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-    this.timeout = setTimeout(this.transition.bind(this), timeout);
   };
 
   LuiSlider.prototype.next = function(e) {
@@ -224,23 +214,23 @@
     });
   };
 
-  /**
-   * Once active slide has been set, it performs a transition in browser
-   */
-  LuiSlider.prototype.transition = function transition() {
+  LuiSlider.prototype.setContainerCSS = function setContainerCSS() {
     var toIndex = this.getActiveSlideIndex();
-    var fromSlide = this.el.getElementsByClassName(this.activeClass)[0] ||
-      this.el.childNodes[0];
-    var toSlide = this.el.childNodes[toIndex];
-
-    var csswidth = window.getComputedStyle(toSlide).getPropertyValue('width');
+    var reference;
+    Array
+      .prototype
+      .forEach
+      .call(this.el.childNodes,
+        function(node) {
+          if (node.classList.contains(this.activeClass)) {
+            console.log('active');
+          } else {
+            reference = node;
+          }
+        }, this);
+    var csswidth = window.getComputedStyle(reference).getPropertyValue('width');
     var width = parseInt(csswidth, 10);
     var factor;
-
-    if (toSlide !== fromSlide) {
-      fromSlide.classList.remove(this.activeClass);
-      toSlide.classList.add(this.activeClass);
-    }
 
     if (toIndex < 3) {
       factor = 0;
@@ -251,6 +241,28 @@
     }
 
     this.el.style.marginLeft = -1 * factor * width + 'px';
+  };
+
+  /**
+   * Once active slide has been set, it performs a transition in browser
+   */
+  LuiSlider.prototype.transition = function transition() {
+    var toIndex = this.getActiveSlideIndex();
+    var fromSlide = this.el.getElementsByClassName(this.activeClass)[0] ||
+      this.el.childNodes[0];
+    var toSlide = this.el.childNodes[toIndex];
+
+    if (fromSlide === toSlide) {
+      this.setContainerCSS();
+      return this;
+    }
+
+
+    fromSlide.classList.remove(this.activeClass);
+    toSlide.classList.add(this.activeClass);
+
+    this.setContainerCSS();
+    return this;
   };
 
   window.mainSlider = new LuiSlider({
