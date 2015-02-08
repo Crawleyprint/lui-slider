@@ -1,0 +1,13 @@
+/**
+ * Import partials by type here.
+ *
+ * Importing should follow
+ * Harry Roberts' ITCSS methodology, which basically means
+ * to order your imports and structure your CSS with specificity in mind
+ * Link: https://speakerdeck.com/dafed/managing-css-projects-with-itcss
+ */
+@import "tools/variables";
+
+body {
+  color: $color--base;
+}
