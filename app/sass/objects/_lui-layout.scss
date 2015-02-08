@@ -13,7 +13,7 @@
   width: 18%;
   vertical-align: $lui-slider-item-alignment;
 
-  &--current {
+  &--active {
     transform: scale(130%, 130%);
     width: 28%;
   }
