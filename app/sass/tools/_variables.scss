@@ -1,1 +1,7 @@
-$color--base: black;
+$color--base: black !default;
+
+$lui-font-size--base: 12px !default;
+
+//specific modules
+
+$lui-font-size--slider-item: $lui-font-size--base !default;

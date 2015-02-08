@@ -1,0 +1,25 @@
+.lui-slider__frame {
+  font-size: 0; // This eliminates gap between elements defined as inline-block
+  width: 100%;
+  white-space: nowrap;
+}
+
+.lui-slider__item {
+  // due to nature of CSS, font-size: 0; cascades to all children here, which
+  // isn't quite what we want, hence we have to reset the font size
+  font-size: $lui-font-size--slider-item;
+  display: inline-block;
+  transform: scale(100%, 100%);
+  width: 18%;
+  vertical-align: middle;
+
+  &--current {
+    transform: scale(130%, 130%);
+    width: 28%;
+  }
+}
+
+.lui-slider__image {
+  display: block;
+  width: 100%;
+}
