@@ -57,7 +57,7 @@
       .call(images)
       .forEach(this.addImageToSlider.bind(this));
 
-    window.onresize = this.transition;
+    window.onresize = this.transition.bind(this);
 
     /**
      * Remove all images to make scene for template rendering
@@ -118,11 +118,20 @@
       .prototype
       .slice
       .call(this.el.childNodes)
-      .forEach(function(child) {
-        child.addEventListener('click', that.transition);
-      });
+      .forEach(this.setupSlideActions.bind(this));
 
     return this;
+  };
+
+  LuiSlider.prototype.setupSlideActions =
+      function setupSlideActions(child, idx) {
+        child.addEventListener('click', this.imageNavClick.bind(this, idx));
+      };
+
+  LuiSlider.prototype.imageNavClick = function imageNavClickHandler(idx) {
+    this.setActiveSlideIndex(idx);
+    this.transition();
+    return false;
   };
 
   LuiSlider.prototype.switchSlide = function switchSlide(direction) {
@@ -200,7 +209,10 @@
     });
   };
 
-  LuiSlider.prototype.transition = function() {
+  /**
+   * Once active slide has been set, it performs a transition in browser
+   */
+  LuiSlider.prototype.transition = function transition() {
     var toIndex = this.getActiveSlideIndex();
     var fromSlide = this.el.getElementsByClassName(this.activeClass)[0] ||
       this.el.childNodes[0];
