@@ -19,6 +19,7 @@
         .getElementById(options.prevElement || 'previous');
     this.nextElement = document
         .getElementById(options.prevElement || 'next');
+    this.images = options.imageArray || [];
     /**
      * ... then, see what's already in there and store an instance variable
      * with list of those images and basic attributes
@@ -36,25 +37,30 @@
   }
 
   LuiSlider.prototype.setup = function luiSetup() {
-    var loadedImages = [];
-    var images = this.el.getElementsByTagName('img');
-    var that = this;
+    // get all images
+    var images = this.el.getElementsByTagName('img') || [];
 
+    // setup event listeners for next and previous buttons
     this.nextElement.addEventListener('click', this.next.bind(this));
     this.prevElement.addEventListener('click', this.previous.bind(this));
 
-    Array.prototype.slice.call(images).forEach(function addImageToInitial(img) {
-      var isActive = img.classList.contains(that.activeClass);
-      loadedImages.push({
-        src: img.getAttribute('src'),
-        alt: img.getAttribute('alt'),
-        isActive: isActive
-      });
-    });
-
-    this.images = loadedImages;
+    Array
+      .prototype
+      .slice
+      .call(images)
+      .forEach(this.addImageToSlider.bind(this));
 
     return this;
+  };
+
+  LuiSlider.prototype.addImageToSlider = function addImageToSlider(img) {
+    var isActive = img.classList.contains(this.activeClass);
+    this.images.push({
+      rendered: false,
+      src: img.getAttribute('src'),
+      alt: img.getAttribute('alt'),
+      isActive: isActive
+    });
   };
 
   /**
