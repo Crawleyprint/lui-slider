@@ -55,6 +55,9 @@
     return this;
   };
 
+  /**
+   * Resets the stage so JavaScript can begin drawing the slider
+   */
   LuiSlider.prototype.clean = function() {
     var element = this.el;
     while(element.hasChildNodes()) {
@@ -63,6 +66,9 @@
     return this;
   };
 
+  /**
+   * Provide string template
+   */
   LuiSlider.prototype.template = function(item) {
     var activeClass = item.isActive ? ' lui-slider__item--active': '';
     return [
@@ -75,9 +81,9 @@
   };
 
   LuiSlider.prototype.render = function() {
-    this.clean();
-    var html = [];
     var that = this;
+    var html = [];
+    that.clean();
     this.images.forEach(function(image) {
       html.push(that.template(image));
     });
