@@ -6,6 +6,8 @@
    * Slider app prototype
    *
    * @param {Object} o - Slider options map
+   * @author Mladen Stepanić <mladen.stepanic@gmail.com>
+   * @license GNU GPL3
    */
   function LuiSlider(options) {
     /**
