@@ -58,11 +58,6 @@
     return this;
   };
 
-  /**
-   * Makes default template if no template string is provided to constructor
-   *
-   * @param {Object} item - JSON object for image to render
-   */
   LuiSlider.prototype.template = function(item) {
     var activeClass = item.isActive ? ' lui-slider__item--active': '';
     return [
@@ -75,6 +70,7 @@
   };
 
   LuiSlider.prototype.render = function() {
+    this.clean();
     var html = [];
     var that = this;
     this.images.forEach(function(image) {
@@ -84,7 +80,51 @@
     return this;
   };
 
-  var mainSlider = new LuiSlider({
+  LuiSlider.prototype.next = function() {
+    var activeIndex = -1;
+    var sliderLength = this.images.length;
+    var next;
+
+    this.images.forEach(function filterImages(image, idx) {
+      if (image.isActive === true) {
+        activeIndex = idx;
+      }
+    });
+    this.images[activeIndex].isActive = false;
+    if (activeIndex === sliderLength - 1) {
+      next = 0;
+    } else {
+      next = activeIndex + 1;
+    }
+    this.images[next].isActive = true;
+    this.render();
+  };
+
+  LuiSlider.prototype.previous = function() {
+    var activeIndex = -1;
+    var sliderLength = this.images.length;
+    var prev;
+
+    // find active image index
+    this.images.forEach(function filterImages(image, idx) {
+      if (image.isActive === true) {
+        activeIndex = idx;
+      }
+    });
+    // remove active flag from it
+    this.images[activeIndex].isActive = false;
+    // if first item is active, set that last element of the image array
+    // should go next
+    if (activeIndex === 0) {
+      prev = this.images.length - 1;
+    } else {
+      prev = activeIndex - 1;
+    }
+    this.images[prev].isActive = true;
+    this.render();
+  };
+
+  window.mainSlider = new LuiSlider({
     elementId: 'slider'
   });
 
