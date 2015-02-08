@@ -18,21 +18,25 @@
      */
     this.el = document.getElementById(options.elementId);
     this.activeClass = options.activeClass || 'lui-slider__item--active';
+    this.initialActiveSlideIndex = options.activeSlide || 2;
+
+    /**
+     * Sets up control elements
+     */
     this.prevElement = document
         .getElementById(options.prevElement || 'previous');
     this.nextElement = document
         .getElementById(options.prevElement || 'next');
+
+    /**
+     * ... and initial image array
+     */
     this.images = options.imageArray || [];
     /**
      * ... then, see what's already in there and store an instance variable
      * with list of those images and basic attributes
      */
     this.setup();
-    /**
-     * Remove all images to make scene for template rendering
-     */
-    this.clean();
-    this.render();
     /**
      * ... and return slider object to allow chaining of methods
      */
@@ -53,11 +57,23 @@
       .call(images)
       .forEach(this.addImageToSlider.bind(this));
 
-    window.onresize = this.transitionToSlide;
+    window.onresize = this.transition;
+
+    /**
+     * Remove all images to make scene for template rendering
+     */
+    this.empty();
+    this.render();
+    this.setActiveSlideIndex(this.initialActiveSlideIndex);
+    this.transition();
 
     return this;
   };
 
+  /**
+   * Add individual image to slider model.
+   * Separated as method for importing json data after initial page load.
+   */
   LuiSlider.prototype.addImageToSlider = function addImageToSlider(img) {
     var isActive = img.classList.contains(this.activeClass);
     this.images.push({
@@ -70,7 +86,7 @@
   /**
    * Resets the stage so JavaScript can begin drawing the slider
    */
-  LuiSlider.prototype.clean = function() {
+  LuiSlider.prototype.empty = function() {
     var element = this.el;
     while(element.hasChildNodes()) {
       element.removeChild(element.firstChild);
@@ -82,9 +98,8 @@
    * Provide string template
    */
   LuiSlider.prototype.template = function(item) {
-    var activeClass = item.isActive ? ' lui-slider__item--active': '';
     return [
-      '<div class="lui-slider__item' + activeClass + '">',
+      '<div class="lui-slider__item">',
         '<img ',
           'class="lui-slider__image" ',
           'src="' + item.src + '" alt="' + item.alt + '">',
@@ -99,12 +114,20 @@
       html.push(that.template(image));
     });
     this.el.innerHTML = html.join('');
+    Array
+      .prototype
+      .slice
+      .call(this.el.childNodes)
+      .forEach(function(child) {
+        child.addEventListener('click', that.transition);
+      });
+
     return this;
   };
 
   LuiSlider.prototype.switchSlide = function switchSlide(direction) {
     var totalLength = this.images.length;
-    var activeIndex = this.findActiveSlide();
+    var activeIndex = this.getActiveSlideIndex();
     var destIndex;
     var active = this.images[activeIndex];
     var dest;
@@ -132,7 +155,7 @@
 
     this.images.splice(activeIndex, 1, active);
     this.images.splice(destIndex , 1, dest);
-    this.transitionToSlide(destIndex);
+    this.transition();
   };
 
   LuiSlider.prototype.next = function(e) {
@@ -156,7 +179,7 @@
    *
    * @return {{Number}}
    */
-  LuiSlider.prototype.findActiveSlide = function findActiveSlide() {
+  LuiSlider.prototype.getActiveSlideIndex = function getActiveSlideIndex() {
     var activeIndex = -1;
     this.images.forEach(function filterImages(image, idx) {
       if (image.isActive === true) {
@@ -167,11 +190,20 @@
     return activeIndex;
   };
 
-  LuiSlider.prototype.transitionToSlide = function(toIndex) {
-    if (!toIndex) {
-      toIndex = this.findActiveSlide();
-    }
-    var fromSlide = this.el.getElementsByClassName(this.activeClass)[0];
+  LuiSlider.prototype.setActiveSlideIndex = function setActiveSlideIndex(idx) {
+    this.images.forEach(function setActiveSlide(image, index) {
+      if (index === idx) {
+        image.isActive = true;
+      } else {
+        image.isActive = false;
+      }
+    });
+  };
+
+  LuiSlider.prototype.transition = function() {
+    var toIndex = this.getActiveSlideIndex();
+    var fromSlide = this.el.getElementsByClassName(this.activeClass)[0] ||
+      this.el.childNodes[0];
     var toSlide = this.el.childNodes[toIndex];
 
     var csswidth = window.getComputedStyle(toSlide).getPropertyValue('width');
