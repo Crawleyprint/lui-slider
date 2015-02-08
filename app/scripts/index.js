@@ -13,12 +13,15 @@
      */
     this.el = document.getElementById(options.elementId);
     this.activeClass = options.activeClass || 'lui-slider__item--active';
+    this.prevElement = document
+        .getElementById(options.prevElement || 'previous');
+    this.nextElement = document
+        .getElementById(options.prevElement || 'next');
     /**
      * ... then, see what's already in there and store an instance variable
      * with list of those images and basic attributes
      */
     this.setup();
-
     /**
      * Remove all images to make scene for template rendering
      */
@@ -30,11 +33,13 @@
     return this;
   }
 
-  LuiSlider.prototype.setup = function luiGatherFacts() {
+  LuiSlider.prototype.setup = function luiSetup() {
     var loadedImages = [];
     var images = this.el.getElementsByTagName('img');
     var that = this;
 
+    this.nextElement.addEventListener('click', this.next.bind(this));
+    this.prevElement.addEventListener('click', this.previous.bind(this));
 
     Array.prototype.slice.call(images).forEach(function addImageToInitial(img) {
       var isActive = img.classList.contains(that.activeClass);
@@ -80,7 +85,10 @@
     return this;
   };
 
-  LuiSlider.prototype.next = function() {
+  LuiSlider.prototype.next = function(e) {
+    if (e) {
+      e.preventDefault();
+    }
     var activeIndex = -1;
     var sliderLength = this.images.length;
     var next;
@@ -100,9 +108,11 @@
     this.render();
   };
 
-  LuiSlider.prototype.previous = function() {
+  LuiSlider.prototype.previous = function(e) {
+    if (e) {
+      e.preventDefault();
+    }
     var activeIndex = -1;
-    var sliderLength = this.images.length;
     var prev;
 
     // find active image index
