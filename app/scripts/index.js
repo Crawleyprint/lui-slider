@@ -18,7 +18,8 @@
      */
     this.el = document.getElementById(options.elementId);
     this.activeClass = options.activeClass || 'lui-slider__item--active';
-    this.initialActiveSlideIndex = options.activeSlide || 2;
+    this.initialActiveSlideIndex = (options.activeSlide || 3) - 1;
+    console.log(this.initialActiveSlideIndex);
 
     /**
      * Sets up control elements
