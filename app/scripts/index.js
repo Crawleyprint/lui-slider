@@ -19,7 +19,6 @@
     this.el = document.getElementById(options.elementId);
     this.activeClass = options.activeClass || 'lui-slider__item--active';
     this.initialActiveSlideIndex = (options.activeSlide || 3) - 1;
-    console.log(this.initialActiveSlideIndex);
 
     /**
      * Sets up control elements
@@ -217,30 +216,34 @@
   LuiSlider.prototype.setContainerCSS = function setContainerCSS() {
     var toIndex = this.getActiveSlideIndex();
     var reference;
-    Array
-      .prototype
-      .forEach
-      .call(this.el.childNodes,
-        function(node) {
-          if (node.classList.contains(this.activeClass)) {
-            console.log('active');
-          } else {
-            reference = node;
-          }
-        }, this);
-    var csswidth = window.getComputedStyle(reference).getPropertyValue('width');
-    var width = parseInt(csswidth, 10);
+    var csswidth;
+    var width;
     var factor;
+    var nodes = Array.prototype.slice.call(this.el.childNodes);
 
-    if (toIndex < 3) {
+    for (var i = 0; i < nodes.length; i+=1) {
+      if (!nodes[i].classList.contains(this.activeClass)) {
+        reference = nodes[i];
+        break;
+      }
+    }
+
+    if (toIndex === nodes.length - 1) {
+      reference = reference.nextElementSibling;
+    }
+
+
+    csswidth = window.getComputedStyle(reference).getPropertyValue('width');
+    width = parseInt(csswidth, 10);
+
+    if (toIndex <= this.initialActiveSlideIndex) {
       factor = 0;
-    } else if (toIndex < this.images.length - 2) {
-      factor = toIndex - 2;
+    } else if (toIndex < this.images.length - this.initialActiveSlideIndex) {
+      factor = toIndex - this.initialActiveSlideIndex;
     } else {
       factor = this.images.length - 5;
     }
-
-    this.el.style.marginLeft = -1 * factor * width + 'px';
+    this.el.style.marginLeft = (-1 * factor * width) + 'px';
   };
 
   /**
