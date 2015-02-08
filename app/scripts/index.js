@@ -58,7 +58,7 @@
       .call(images)
       .forEach(this.addImageToSlider.bind(this));
 
-    window.onresize = this.transition.bind(this);
+    window.onresize = this.switchSlide.bind(this);
 
     /**
      * Remove all images to make scene for template rendering
@@ -109,11 +109,10 @@
   };
 
   LuiSlider.prototype.render = function() {
-    var that = this;
     var html = [];
     this.images.forEach(function(image) {
-      html.push(that.template(image));
-    });
+      html.push(this.template(image));
+    }, this);
     this.el.innerHTML = html.join('');
     Array
       .prototype
@@ -142,6 +141,11 @@
     var active = this.images[activeIndex];
     var dest;
 
+    if (typeof direction === 'object') {
+      this.timeout = this.initTransition(2000);
+      return;
+    }
+
     // remove active flag from it
     active.isActive = false;
     // if first item is active, set that last element of the image array
@@ -152,7 +156,7 @@
       } else {
         destIndex = activeIndex + 1;
       }
-    } else {
+    } else if (direction === 'prev') {
       if (activeIndex === 0) {
         destIndex = totalLength - 1;
       } else {
@@ -165,7 +169,17 @@
 
     this.images.splice(activeIndex, 1, active);
     this.images.splice(destIndex , 1, dest);
-    this.transition();
+    this.timeout = this.transition();
+  };
+
+  LuiSlider.prototype.initTransition = function initTransition(timeout) {
+    if (!timeout) {
+      timeout = 0;
+    }
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout(this.transition.bind(this), timeout);
   };
 
   LuiSlider.prototype.next = function(e) {
@@ -223,8 +237,10 @@
     var width = parseInt(csswidth, 10);
     var factor;
 
-    fromSlide.classList.remove(this.activeClass);
-    toSlide.classList.add(this.activeClass);
+    if (toSlide !== fromSlide) {
+      fromSlide.classList.remove(this.activeClass);
+      toSlide.classList.add(this.activeClass);
+    }
 
     if (toIndex < 3) {
       factor = 0;
