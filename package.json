@@ -4,7 +4,8 @@
   "description": "JavaScript UI slider",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm install && bower install && gulp"
   },
   "author": "Mladen Stepanić",
   "license": "GPLv3",
