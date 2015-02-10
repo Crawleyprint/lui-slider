@@ -10,3 +10,5 @@ node_modules
 css
 npm-debug.log
 bower_components
+app/includes
+app/dev.html
