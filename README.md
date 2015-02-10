@@ -35,6 +35,6 @@ _Building:_
 - Go to your downloaded directory in your terminal app and execute `npm start`
 - Open [http://localhost:8000](http://localhost:8000)
 
-_Demo:_ [crawleyprint.github.io/lui-slider](crawleyprint.github.io/lui-slider)
+_Demo:_ [crawleyprint.github.io/lui-slider](https://crawleyprint.github.io/lui-slider)
 
 
