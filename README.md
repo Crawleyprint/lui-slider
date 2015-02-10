@@ -6,9 +6,10 @@ Data-driven image slider implemented in vanilla JavaScript.
 
 LUI Slider uses JavaScript to determine which slide is selected and to set up event listeners for "next" and "previous" buttons, while CSS is responsible for positioning and animating.
 
-_Coniguration:_
+_Configuration:_
 
-    var slider = new LUISlider({
+```javascript
+    var slider = new LuiSlider({
       // host element (currently only id is supported)
       el: 'element-id',
       // id of element used for going to next slide
@@ -24,7 +25,7 @@ _Coniguration:_
       // default: 3
       activeSlide: 1,
     });
-
+```
 _Building:_
 
 - Clone this repo or download zip
@@ -34,6 +35,6 @@ _Building:_
 - Go to your downloaded directory in your terminal app and execute `npm start`
 - Open [http://localhost:8000](http://localhost:8000)
 
-_Demo:_ [crawleyprint.github.io/lui-slider](crawleyprint.github.io/lui-slider)
+_Demo:_ [crawleyprint.github.io/lui-slider](https://crawleyprint.github.io/lui-slider)
 
 
