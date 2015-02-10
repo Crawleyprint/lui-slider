@@ -50,6 +50,42 @@
     <div id="previous" class="lui__btn lui__btn--previous">Prev</div>
     <div id="next" class="lui__btn lui__btn--next">Next</div>
   </div>
+  <div class="layout layout--center">
+    <div class="layout__item 3/4">
+      <h1 id="libre-ui-slider">Libre UI slider</h1>
+<h3 id="look-ma-no-jquery-">Look ma&#39;, no jQuery!</h3>
+<p>Data-driven image slider implemented in vanilla JavaScript.</p>
+<p>LUI Slider uses JavaScript to determine which slide is selected and to set up event listeners for &quot;next&quot; and &quot;previous&quot; buttons, while CSS is responsible for positioning and animating.</p>
+<p><em>Coniguration:</em></p>
+<pre><code>var slider = new LUISlider({
+  // host element (currently only id is supported)
+  el: &#39;element-id&#39;,
+  // id of element used for going to next slide
+  // default: &#39;prev&#39;,
+  nextElement: &#39;next-element-id&#39;,
+  // id of element used for going to previous slide
+  // default: &#39;next&#39;,
+  prevElement: &#39;prev-element-id&#39;,
+  // className for active slide
+  // default: .lui-slider__item--active
+  activeClass: &#39;classname&#39;,
+  // set initial active slide
+  // default: 3
+  activeSlide: 1,
+});
+</code></pre><p><em>Building:</em></p>
+<ul>
+<li>Clone this repo or download zip</li>
+<li>Install nodeJS</li>
+<li>Install gulp - <code>npm install -g gulp</code></li>
+<li>Install bower - <code>npm install -g bower</code></li>
+<li>Go to your downloaded directory in your terminal app and execute <code>npm start</code></li>
+<li>Open <a href="http://localhost:8000">http://localhost:8000</a></li>
+</ul>
+<p><em>Demo:</em> <a href="crawleyprint.github.io/lui-slider">crawleyprint.github.io/lui-slider</a></p>
+
+    </div>
+  </div>
   <script src="app/scripts/index.js"></script>
 </body>
 </html>
