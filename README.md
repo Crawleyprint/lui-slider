@@ -5,7 +5,7 @@
 Data-driven image slider implemented in vanilla JavaScript.
 
 LUI Slider uses JavaScript to determine which slide is selected and to set up event listeners for "next" and "previous" buttons, while CSS is responsible for positioning and animating.
-
+```javascript
 _Coniguration:_
 
     var slider = new LUISlider({
@@ -24,7 +24,7 @@ _Coniguration:_
       // default: 3
       activeSlide: 1,
     });
-
+```
 _Building:_
 
 - Clone this repo or download zip
