@@ -10,3 +10,5 @@ _Buildig:_
 - Install bower - `npm install -g bower`
 - Go to your downloaded directory in your terminal app and execute `npm start`
 - Open [http://localhost:8000](http://localhost:8000)
+
+_Demo:_ [crawleyprint.github.io/lui-slider](crawleyprint.github.io/lui-slider)
