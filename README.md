@@ -8,7 +8,7 @@ LUI Slider uses JavaScript to determine which slide is selected and to set up ev
 ```javascript
 _Coniguration:_
 
-    var slider = new LUISlider({
+    var slider = new LuiSlider({
       // host element (currently only id is supported)
       el: 'element-id',
       // id of element used for going to next slide
