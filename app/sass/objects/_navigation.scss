@@ -1,0 +1,15 @@
+ .navigation--main {
+   padding: 0 $inuit-base-spacing-unit;
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   height: $lui-height--navigation;
+   line-height: $lui-height--navigation;
+   background-color: $lui-color--base;
+   color: $lui-color--light;
+
+   + * {
+     margin-top: 2 * $lui-height--navigation !important;
+   }
+ }
